@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-namespace-generator
+  namespace: applicationset-namespace-generator-plugin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argocd-namespace-generator
+  template:
+    metadata:
+      labels:
+        app: argocd-namespace-generator
+    spec:
+      serviceAccountName: argocd-namespace-generator
+      containers:
+        - name: argocd-namespace-generator
+          image: ghcr.io/estenrye/argocd-namespace-generator:0.1.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          ports:
+            - containerPort: 8080
+              name: http

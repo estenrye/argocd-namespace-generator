@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shortname
+  labels:
+    rye.ninja/deployment-type: "infra"
+    nginx-tag: "1.28.0"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shortname-region-one
+  labels:
+    rye.ninja/deployment-type: "compute"
+    nginx-tag: "1.27.0"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shortname-region-two
+  labels:
+    rye.ninja/deployment-type: "compute"
+    nginx-tag: "1.26.0"
