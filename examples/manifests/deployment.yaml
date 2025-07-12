@@ -18,6 +18,18 @@ spec:
         - name: argocd-namespace-generator
           image: ghcr.io/estenrye/argocd-namespace-generator:0.1.0
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
           resources:
             requests:
               cpu: 100m
@@ -35,4 +47,4 @@ spec:
       volumes:
         - name: token
           secret:
-            secretName: applicationset-hello-plugin
+            secretName: argocd-namespace-generator

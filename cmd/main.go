@@ -44,8 +44,8 @@ func GetParamsExecuteHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/health", endpoints.HealthCheckHandler)
-	r.HandleFunc("/api/v1/getparams.execute", GetParamsExecuteHandler).Methods("GET")
+	r.HandleFunc("/healthz", endpoints.HealthCheckHandler).Methods("GET")
+	r.HandleFunc("/readyz", endpoints.HealthCheckHandler).Methods("GET")
 	r.HandleFunc("/api/v1/getparams.execute", GetParamsExecuteHandler).Methods("POST")
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", r)

@@ -9,13 +9,14 @@ REPOSITORY ?= ghcr.io/estenrye
 build-local:
 	docker buildx build -t $(REPOSITORY)/argocd-namespace-generator:$(TAG) .
 
-kind-create: build-local
+kind-create: kind-delete build-local
 	kind create cluster --config $(KIND_CONFIG)
 	kubectl config use-context kind-$(KIND_CLUSTER_NAME)
 	kubectl create namespace argocd
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/$(ARGOCD_VERSION)/manifests/core-install.yaml
 	kind load docker-image $(REPOSITORY)/argocd-namespace-generator:$(TAG) --name $(KIND_CLUSTER_NAME)
 	kubectl apply -k examples/manifests
+	kubectl apply -k examples/applications
 
 kind-delete:
 	kind delete cluster --name $(KIND_CLUSTER_NAME)

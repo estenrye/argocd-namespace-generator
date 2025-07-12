@@ -20,6 +20,12 @@ ARG TARGETARCH
 WORKDIR /app/cmd
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /out/argocd-namespace-generator .
 
+WORKDIR /app/cmd/types
+RUN go test
+
+WORKDIR /app/cmd/endpoints
+RUN go test
+
 # --- Final Stage ---
 FROM --platform=$TARGETPLATFORM scratch
 
