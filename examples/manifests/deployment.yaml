@@ -28,3 +28,11 @@ spec:
           ports:
             - containerPort: 8080
               name: http
+          volumeMounts:
+            - mountPath: /var/run/argo/token
+              name: token
+              subPath: token
+      volumes:
+        - name: token
+          secret:
+            secretName: applicationset-hello-plugin

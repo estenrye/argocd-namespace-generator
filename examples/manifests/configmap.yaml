@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-namespace-generator
+  namespace: argocd
+data:
+  token: '$argocd-namespace-generator:token'
+  baseUrl: "http://argocd-namespace-generator.applicationset-namespace-generator-plugin.svc.cluster.local"
