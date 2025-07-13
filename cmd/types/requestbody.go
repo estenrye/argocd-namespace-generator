@@ -1,5 +1,5 @@
 package types
 
 type RequestBody struct {
-	Parameters Parameters `json:"parameters"`
+	Input Input `json:"input"`
 }

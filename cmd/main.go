@@ -20,7 +20,7 @@ import (
 func GetParamsExecuteHandler(w http.ResponseWriter, r *http.Request) {
 	logger := zapmw.GetZap(r)
 
-	logger.Sugar().Debug("Request Headers:", r.Header, "Query Args:", r.URL.Query(), "Body:", r.Body)
+	logger.Sugar().Info("Request Headers:", r.Header, "Query Args:", r.URL.Query(), "Body:", r.Body)
 
 	var reqBody types.RequestBody
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil && err != io.EOF {
@@ -41,12 +41,14 @@ func GetParamsExecuteHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	var responseBody types.ResponseBody = types.ResponseBody{
-		Parameters: make([]types.NamespaceInfo, len(namespaces)),
+		Output: types.Output{
+			Parameters: make([]map[string]string, len(namespaces)),
+		},
 	}
 
 	for _, ns := range namespaces {
-		if reqBody.Parameters.Matches(ns) {
-			responseBody.Parameters = append(responseBody.Parameters, ns)
+		if reqBody.Input.Parameters.Matches(ns) {
+			responseBody.Output.Parameters = append(responseBody.Output.Parameters, ns.ToResult())
 		}
 	}
 

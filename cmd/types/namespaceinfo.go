@@ -40,3 +40,15 @@ func ListNamespaces() ([]NamespaceInfo, error) {
 	}
 	return infos, nil
 }
+
+func (ns NamespaceInfo) ToResult() map[string]string {
+	result := make(map[string]string)
+	result["name"] = ns.Name
+	for k, v := range ns.Annotations {
+		result[fmt.Sprintf("annotations-%s", k)] = v
+	}
+	for k, v := range ns.Labels {
+		result[fmt.Sprintf("labels-%s", k)] = v
+	}
+	return result
+}

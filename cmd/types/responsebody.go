@@ -1,5 +1,5 @@
 package types
 
 type ResponseBody struct {
-	Parameters []NamespaceInfo `json:"parameters"`
+	Output Output `json:"output"`
 }

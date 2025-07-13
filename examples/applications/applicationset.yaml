@@ -16,11 +16,11 @@ spec:
     metadata:
       name: "whoami-appset-{{name}}"
     spec:
-      project: default
+      project: whoami
       source:
         repoURL: https://cowboysysop.github.io/charts/
         chart: whoami
-        targetRevision: "{{labels.whoami}}"
+        targetRevision: "{{labels-whoami}}"
         helm:
           releaseName: whoami
           valuesObject: {}
