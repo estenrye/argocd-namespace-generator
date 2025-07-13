@@ -5,4 +5,4 @@ metadata:
   namespace: argocd
 data:
   token: '$argocd-namespace-generator:token'
-  baseUrl: "http://plugin.applicationset-namespace-generator-plugin.svc.cluster.local"
+  baseUrl: "http://plugin.argocd.svc.cluster.local:8080"

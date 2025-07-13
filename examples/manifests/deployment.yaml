@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: argocd-namespace-generator
-  namespace: applicationset-namespace-generator-plugin
 spec:
   replicas: 1
   selector:
