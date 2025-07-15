@@ -41,6 +41,13 @@ func ListNamespaces() ([]NamespaceInfo, error) {
 	return infos, nil
 }
 
+func ListRemoteClusterNamespaces() ([]NamespaceInfo, error) {
+
+	// This function is a placeholder for future implementation.
+	// It should connect to a remote cluster and list namespaces.
+	return nil, fmt.Errorf("ListRemoteClusterNamespaces is not implemented yet")
+}
+
 func (ns NamespaceInfo) ToResult() map[string]string {
 	result := make(map[string]string)
 	result["name"] = ns.Name

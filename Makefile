@@ -15,7 +15,6 @@ kind-create: build-local
 	kubectl create namespace argocd
 	kind load docker-image $(REPOSITORY)/argocd-namespace-generator:$(TAG) --name $(KIND_CLUSTER_NAME)
 	kubectl apply -k examples/manifests
-	kubectl apply -k examples/applications
 
 kind-delete:
 	kubectl config use-context kind-$(KIND_CLUSTER_NAME)
