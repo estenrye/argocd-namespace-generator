@@ -14,7 +14,7 @@ spec:
               - key: whoami
   template:
     metadata:
-      name: "whoami-appset-{{name}}"
+      name: "whoami-appset-{{serverName}}-{{name}}"
     spec:
       project: whoami
       source:
@@ -25,7 +25,7 @@ spec:
           releaseName: whoami
           valuesObject: {}
       destination:
-        server: https://kubernetes.default.svc
+        server: "{{serverHost}}"
         namespace: "{{name}}"
 
       syncPolicy:
