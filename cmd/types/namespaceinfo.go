@@ -16,11 +16,12 @@ import (
 
 // NamespaceInfo holds information about a Kubernetes namespace.
 type NamespaceInfo struct {
-	Name        string            `json:"name"`
-	Annotations map[string]string `json:"annotations"`
-	Labels      map[string]string `json:"labels"`
-	ServerHost  string            `json:"serverHost"`
-	ServerName  string            `json:"serverName"`
+	Name         string            `json:"name"`
+	Annotations  map[string]string `json:"annotations"`
+	Labels       map[string]string `json:"labels"`
+	ServerHost   string            `json:"serverHost"`
+	ServerName   string            `json:"serverName"`
+	ServerLabels map[string]string `json:"serverLabels,omitempty"`
 }
 
 // ListNamespaces uses the in-cluster config to authenticate with Kubernetes and returns a list of NamespaceInfo.
@@ -106,6 +107,8 @@ func ListRemoteClusterNamespaces(r *http.Request) ([]NamespaceInfo, error) {
 			continue
 		}
 
+		serverLabels := secret.Labels
+
 		// Parse the JSON config data
 		logger.Debug("unmarshalling cluster config", zap.String("name", secret.Name), zap.String("namespace", secret.Namespace))
 		var clusterData map[string]interface{}
@@ -168,11 +171,12 @@ func ListRemoteClusterNamespaces(r *http.Request) ([]NamespaceInfo, error) {
 		logger.Debug("found namespaces in remote cluster", zap.Int("count", len(nsList.Items)), zap.String("name", secret.Name), zap.String("namespace", secret.Namespace))
 		for _, ns := range nsList.Items {
 			allNamespaces = append(allNamespaces, NamespaceInfo{
-				Name:        ns.Name,
-				Annotations: ns.Annotations,
-				Labels:      ns.Labels,
-				ServerHost:  remoteClusterConfig.Host,
-				ServerName:  string(serverName),
+				Name:         ns.Name,
+				Annotations:  ns.Annotations,
+				Labels:       ns.Labels,
+				ServerHost:   remoteClusterConfig.Host,
+				ServerName:   string(serverName),
+				ServerLabels: serverLabels,
 			})
 		}
 	}
@@ -184,6 +188,9 @@ func (ns NamespaceInfo) ToResult() map[string]string {
 	result["name"] = ns.Name
 	result["serverHost"] = ns.ServerHost
 	result["serverName"] = ns.ServerName
+	for k, v := range ns.ServerLabels {
+		result[fmt.Sprintf("serverLabels-%s", k)] = v
+	}
 	for k, v := range ns.Annotations {
 		result[fmt.Sprintf("annotations-%s", k)] = v
 	}
