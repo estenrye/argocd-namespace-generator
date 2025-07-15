@@ -9,13 +9,18 @@ REPOSITORY ?= ghcr.io/estenrye
 build-local:
 	docker buildx build -t $(REPOSITORY)/argocd-namespace-generator:$(TAG) .
 
+rebuild: build-local delete-whoami-appset
+	kubectl config use-context kind-$(KIND_CLUSTER_NAME)
+	kubectl delete -f examples/manifests/deployment.yaml --ignore-not-found=true
+	kind load docker-image $(REPOSITORY)/argocd-namespace-generator:$(TAG) --name $(KIND_CLUSTER_NAME)
+	kubectl apply -k examples/manifests
+
 kind-create: build-local
 	kind create cluster --config $(KIND_CONFIG)
 	kubectl config use-context kind-$(KIND_CLUSTER_NAME)
 	kubectl create namespace argocd
 	kind load docker-image $(REPOSITORY)/argocd-namespace-generator:$(TAG) --name $(KIND_CLUSTER_NAME)
 	kubectl apply -k examples/manifests
-	kubectl apply -k examples/applications
 
 kind-delete:
 	kubectl config use-context kind-$(KIND_CLUSTER_NAME)
@@ -39,7 +44,7 @@ describe-whoami-appset:
 
 delete-whoami-appset:
 	kubectl config use-context kind-$(KIND_CLUSTER_NAME)
-	kubectl delete -k ./examples/applications
+	kubectl delete -k ./examples/applications --ignore-not-found=true
 
 apply-whoami-appset:
 	kubectl config use-context kind-$(KIND_CLUSTER_NAME)
